@@ -1,53 +1,52 @@
-# About
+# 🚀 Local GRPO Training
 
 This is a refactored local version of the Unsloth Colab notebook, based on the excellent work by Daniel Han and the Unsloth team.
 
-Now you can run GRPO policy locally and feel AHA MOMENT on your own machine.
+Now you can run GRPO policy locally and feel the AHA MOMENT on your own machine! ✨
 
-Source:
-- Original Colab notebook post by Daniel Han: [LinkedIn Post](https://www.linkedin.com/posts/danielhanchen_google-colab-activity-7293333957046063104-M3lq)
-- Reasoning model guidance from [Unsloth's blog post](https://unsloth.ai/blog/r1-reasoning)
-- reward [Will's Gist](https://gist.github.com/willccbb/4676755236bb08cab5f4e54a0475d6fb)
+## 📚 Sources
+- 🔗 Original Colab notebook by Daniel Han: [LinkedIn Post](https://www.linkedin.com/posts/danielhanchen_google-colab-activity-7293333957046063104-M3lq)
+- 🧠 Reasoning model guidance from [Unsloth's blog post](https://unsloth.ai/blog/r1-reasoning)
+- 🎯 Reward model from [Will's Gist](https://gist.github.com/willccbb/4676755236bb08cab5f4e54a0475d6fb)
 
-# Prerequisites
+## 🛠️ Prerequisites
 
-- GPU (NVIDIA)
-- make (optional - see Advanced Instructions if not using make)
+- 🖥️ GPU (NVIDIA)
+- 🔧 make (optional - see Advanced Instructions if not using make)
 
-# Quick Start
+## 🏃‍♂️ Quick Start
 
-```
-bash
+```bash
 make up
 ```
 
-# Configuration
+## ⚙️ Configuration
 
-Modify `config.yaml` to customize settings and parameters. Then just
-```
+Modify `config.yaml` to customize settings and parameters. Then simply run:
+```bash
 make train
 ```
 
-# Clean up
+## 🧹 Clean up
 
-```
+```bash
 make down
 ```
 
-# Limitations
+## ⚠️ Limitations
 
-- Currently supports single GPU operations only
-- For multi-GPU or H100 access, please visit [runpod.io](https://runpod.io)
+- 🎮 Currently supports single GPU operations only
+- 💪 For multi-GPU or H100 access, please visit [runpod.io](https://runpod.io)
 
-# Advanced Instructions
+## 🔍 Advanced Instructions
 
 If you prefer not to use `make`, you can run the Docker commands directly:
 
 ```bash
-# Build the image
+# 🏗️ Build the image
 docker build -t grpo_unsloth .
 
-# Create container
+# 📦 Create container
 docker create -it \
     --gpus=all \
     --name grpo_unsloth_container \
@@ -56,18 +55,31 @@ docker create -it \
     -e HF_HOME=/models/cache \
     grpo_unsloth
 
-# Start container
+# 🚀 Start container
 docker start grpo_unsloth_container
 
-# Run a quick test (dry run)
+# 🧪 Run a quick test (dry run)
 docker exec -it grpo_unsloth_container bash -c "uv run python main.py 'saving=null' 'training.max_steps=10'"
 
-# Run full training
+# 🏃 Run full training
 docker exec -it grpo_unsloth_container bash -c "uv run python main.py 'saving=null'"
 
-# Stop container
+# ⏹️ Stop container
 docker stop grpo_unsloth_container
 
-# Remove container
+# 🗑️ Remove container
 docker rm grpo_unsloth_container
 ```
+
+## 🤝 Contributing
+
+Feel free to open issues and pull requests!
+
+## 📄 License
+
+This project is open-source and available under the MIT License.
+
+[![GitHub](https://img.shields.io/github/license/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/issues)
+[![GitHub forks](https://img.shields.io/github/forks/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/network/members)
