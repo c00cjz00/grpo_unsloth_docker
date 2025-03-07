@@ -151,7 +151,7 @@ sbatch job_h100.slurm
 
 ## 儲存model 與 Inference範例驗測
 - strawberry_example
-- 觀看輸出結果, job-700427.out 改為你的JIBID
+- 觀看輸出結果, ```job-700427.out``` 改為你的$JOBID
 ```bash
 tail logs/job-700427.out
 ```
