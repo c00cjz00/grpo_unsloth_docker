@@ -38,7 +38,8 @@ uv run python main.py 'saving=null' 'training.max_steps=10'
 
 ## 執行 (運算, slurm v100)
 - 編寫派送檔案  /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker/job_v100.slurm
-
+- 編修 ```#SBATCH --account=GOV114013```   與 ```#SBATCH --mail-user=summerhill001@gmail.com```
+  
 ```bash
 #!/bin/bash
 #SBATCH --job-name=grpo             # 設定作業名稱為 "grpo"
@@ -91,6 +92,7 @@ sbatch job_v100.slurm
 
 ## 執行 (運算, slurm h100)
 - 編寫派送檔案  /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker/job_h100.slurm
+- 編修 ```#SBATCH --account=GOV114013```   與 ```#SBATCH --mail-user=summerhill001@gmail.com```
 
 ```bash
 #!/bin/bash
