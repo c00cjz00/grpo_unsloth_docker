@@ -1,85 +1,80 @@
-# 🚀 Local GRPO Training
+# 🚀 Local GRPO Training in HPC
 
-This is a refactored local version of the Unsloth Colab notebook, based on the excellent work by Daniel Han and the Unsloth team.
-
-Now you can run GRPO policy locally and feel the AHA MOMENT on your own machine! ✨
-
-## 📚 Sources
-- 🔗 Original Colab notebook by Daniel Han: [LinkedIn Post](https://www.linkedin.com/posts/danielhanchen_google-colab-activity-7293333957046063104-M3lq)
-- 🧠 Reasoning model guidance from [Unsloth's blog post](https://unsloth.ai/blog/r1-reasoning)
-- 🎯 Reward model from [Will's Gist](https://gist.github.com/willccbb/4676755236bb08cab5f4e54a0475d6fb)
-
-## 🛠️ Prerequisites
-
-- 🖥️ GPU (NVIDIA)
-- 🔧 make (optional - see Advanced Instructions if not using make)
-
-## 🏃‍♂️ Quick Start
-
+## 安裝 在 T2 (V100) or 晶創主機 (H100)
+- 登入 T2 or  晶創主機
 ```bash
-make up
+# 下載映像檔
+mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo
+cd /work/$(whoami)/github/hpc_unsloth_grpo
+ml singularity
+singularity pull docker://vllm/vllm-openai:v0.7.2
+
+# 製作相關目錄
+mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/.local/bin
+mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/github
+mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/uv
+mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/workspace
+
+# 下載 uv package
+singularity shell --nv --no-home -B /work -B /work/$(whoami)/github/hpc_unsloth_grpo/workspace:/workspace -B /work/$(whoami)/github/hpc_unsloth_grpo/home:$HOME  ./vllm-openai_v0.7.2.sif
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH=$PATH:$HOME/.local/bin
+
+# 下載套件 grpo_unsloth_docker
+cd ~/github/
+git clone https://github.com/c00cjz00/grpo_unsloth_docker.git
 ```
 
-## ⚙️ Configuration
-
-Modify `config.yaml` to customize settings and parameters. Then simply run:
+## 執行 (測試)
 ```bash
-make train
+ml singularity
+singularity shell --nv --no-home -B /work -B /work/$(whoami)/github/hpc_unsloth_grpo/workspace:/workspace -B /work/$(whoami)/github/hpc_unsloth_grpo/home:$HOME  ./vllm-openai_v0.7.2.sif
+export PATH=$PATH:$HOME/.local/bin
+cd ~/github/grpo_unsloth_docker
+uv run python main.py 'saving=null' 'training.max_steps=10'
 ```
 
-## 🧹 Clean up
-
+## 執行 (運算, slurm)
+- 編寫派送檔案 job_v100.slurm
 ```bash
-make down
+#!/bin/bash
+#SBATCH --job-name=grpo             # 設定作業名稱為 "grpo"
+#SBATCH --partition=gp4d            # 指定使用 "gp4d" 分區
+#SBATCH --account=GOV113021         # 使用 "GOV113021" 計算資源帳戶
+#SBATCH --ntasks-per-node=1         # 每個節點只執行 1 個任務
+#SBATCH --cpus-per-task=4           # 每個任務分配 4 個 CPU 核心
+#SBATCH --gpus-per-node=1           # 每個節點分配 1 個 GPU
+#SBATCH --time=4-00:00:00           # 設定最大執行時間為 4 天
+#SBATCH --output=logs/job-%j.out    # 標準輸出日誌文件，%j 代表作業 ID
+#SBATCH --error=logs/job-%j.err     # 錯誤輸出日誌文件，%j 代表作業 ID
+#SBATCH --mail-type=ALL             # 作業狀態變化時，發送所有通知
+#SBATCH --mail-user=summerhill001@gmail.com  # 通知信箱
+
+# 使用方式：
+# 1. 提交作業: sbatch slurm_job/job_v100.slurm
+# 2. 監控作業日誌: 
+#    tail -f logs/job-<job_id>.err  # 查看錯誤輸出
+#    tail -f logs/job-<job_id>.out  # 查看標準輸出
+
+
+# 建立虛擬專屬目錄
+myBasedir="/work/c00cjz00/github/hpc_unsloth_grpo"
+myHome="myhome/grpo"
+mkdir -p ${myBasedir}/${myHome}
+mkdir -p ${myBasedir}/workspace
+
+# 載入 Singularity 模組
+ml singularity
+
+# 載入 Singularity imaage
+# 啟動訓練
+singularity exec \
+	--nv \
+	--no-home \
+	-B /work \
+    -B ${myBasedir}/workspace:/workspace
+	-B ${myBasedir}/${myHome}:$HOME \
+	${myBasedir}/vllm-openai_v0.7.2.sif \
+	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
 ```
 
-## ⚠️ Limitations
-
-- 🎮 Currently supports single GPU operations only
-- 💪 For multi-GPU or H100 access, please visit [runpod.io](https://runpod.io)
-
-## 🔍 Advanced Instructions
-
-If you prefer not to use `make`, you can run the Docker commands directly:
-
-```bash
-# 🏗️ Build the image
-docker build -t grpo_unsloth .
-
-# 📦 Create container
-docker create -it \
-    --gpus=all \
-    --name grpo_unsloth_container \
-    -v $(pwd)/models:/models \
-    -v $(pwd):/workspace \
-    -e HF_HOME=/models/cache \
-    grpo_unsloth
-
-# 🚀 Start container
-docker start grpo_unsloth_container
-
-# 🧪 Run a quick test (dry run)
-docker exec -it grpo_unsloth_container bash -c "uv run python main.py 'saving=null' 'training.max_steps=10'"
-
-# 🏃 Run full training
-docker exec -it grpo_unsloth_container bash -c "uv run python main.py 'saving=null'"
-
-# ⏹️ Stop container
-docker stop grpo_unsloth_container
-
-# 🗑️ Remove container
-docker rm grpo_unsloth_container
-```
-
-## 🤝 Contributing
-
-Feel free to open issues and pull requests!
-
-## 📄 License
-
-This project is open-source and available under the MIT License.
-
-[![GitHub](https://img.shields.io/github/license/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/blob/main/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/issues)
-[![GitHub forks](https://img.shields.io/github/forks/ArturTanona/grpo_unsloth_docker)](https://github.com/ArturTanona/grpo_unsloth_docker/network/members)
