@@ -38,6 +38,8 @@ uv run python main.py 'saving=null' 'training.max_steps=10'
 ## 執行 (運算, slurm v100)
 - 編寫派送檔案 job_v100.slurm
 ```bash
+sbatch job_v100.slurm
+```bash
 #!/bin/bash
 #SBATCH --job-name=grpo             # 設定作業名稱為 "grpo"
 #SBATCH --partition=gp4d            # 指定使用 "gp4d" 分區
@@ -79,7 +81,10 @@ singularity exec \
 	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
 ```
 
-
+- 派送 job_v100.slurm
+```bash
+sbatch job_v100.slurm
+```
 ## 執行 (運算, slurm h100)
 - 編寫派送檔案 job_h100.slurm
 ```bash
@@ -124,5 +129,10 @@ singularity exec \
 	-B ${myBasedir}/${myHome}:$HOME \
 	${myBasedir}/vllm-openai_v0.7.2.sif \
 	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
+```
+
+- 派送 job_h100.slurm
+```bash
+sbatch job_h100.slurm
 ```
 
