@@ -147,7 +147,7 @@ cd /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker
 sbatch job_h100.slurm
 ```
 
-## 輸出model, inference example
+## 儲存model 與 Inference範例驗測
 - strawberry_example
 
 Q: How many r's are in strawberry?"
