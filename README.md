@@ -14,6 +14,7 @@ mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/.local/bin
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/github
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/uv
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/workspace
+mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/logs
 
 # 下載 uv package
 singularity shell --nv --no-home -B /work -B /work/$(whoami)/github/hpc_unsloth_grpo/workspace:/workspace -B /work/$(whoami)/github/hpc_unsloth_grpo/home:$HOME  ./vllm-openai_v0.7.2.sif
