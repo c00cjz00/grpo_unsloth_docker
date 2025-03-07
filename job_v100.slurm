@@ -33,7 +33,7 @@ singularity exec \
 	--nv \
 	--no-home \
 	-B /work \
-    -B ${myBasedir}/workspace:/workspace
+	-B ${myBasedir}/workspace:/workspace
 	-B ${myBasedir}/${myHome}:$HOME \
 	${myBasedir}/vllm-openai_v0.7.2.sif \
 	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
