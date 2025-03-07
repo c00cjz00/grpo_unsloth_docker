@@ -7,6 +7,8 @@
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo
 cd /work/$(whoami)/github/hpc_unsloth_grpo
 ml singularity
+export SINGULARITY_CACHEDIR=/tmp/singularity_cache
+mkdir -p $SINGULARITY_CACHEDIR
 singularity pull docker://vllm/vllm-openai:v0.7.2
 
 # 製作相關目錄
