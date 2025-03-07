@@ -101,7 +101,7 @@ sbatch job_v100.slurm
 ```bash
 #!/bin/bash
 #SBATCH --job-name=grpo            # 作業名稱
-#SBATCH --partition=GRPO           # 分區名稱
+#SBATCH --partition=normal         # 分區名稱
 #SBATCH --account=GOV114013        # 資源計算帳號
 #SBATCH --nodes=1        	   # 每節點 1 個任務
 #SBATCH --ntasks-per-node=1        # 每節點 1 個任務
