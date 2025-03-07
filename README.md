@@ -135,6 +135,12 @@ singularity exec \
 	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
 ```
 
+- 派送 job_h100.slurm
+
+```bash
+sbatch job_h100.slurm
+```
+
 ## 輸出model, inference example
 - strawberry_example
 
@@ -157,9 +163,5 @@ There are 3 r's in the word "strawberry."
 </answer>
 ```
 
-- 派送 job_h100.slurm
 
-```bash
-sbatch job_h100.slurm
-```
 
