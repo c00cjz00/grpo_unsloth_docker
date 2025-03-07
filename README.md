@@ -16,7 +16,6 @@ mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/.local/bin
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/github
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/home/uv
 mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/workspace
-mkdir -p /work/$(whoami)/github/hpc_unsloth_grpo/logs
 
 # 下載 uv package
 singularity shell --nv --no-home -B /work -B /work/$(whoami)/github/hpc_unsloth_grpo/workspace:/workspace -B /work/$(whoami)/github/hpc_unsloth_grpo/home:$HOME  ./vllm-openai_v0.7.2.sif
@@ -38,7 +37,7 @@ uv run python main.py 'saving=null' 'training.max_steps=10'
 ```
 
 ## 執行 (運算, slurm v100)
-- 編寫派送檔案 job_v100.slurm
+- 編寫派送檔案  /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker/job_v100.slurm
 
 ```bash
 #!/bin/bash
@@ -63,7 +62,7 @@ uv run python main.py 'saving=null' 'training.max_steps=10'
 
 # 建立虛擬專屬目錄
 myBasedir="/work/c00cjz00/github/hpc_unsloth_grpo"
-myHome="myhome/grpo"
+myHome="home"
 mkdir -p ${myBasedir}/${myHome}
 mkdir -p ${myBasedir}/workspace
 
@@ -76,20 +75,22 @@ singularity exec \
 	--nv \
 	--no-home \
 	-B /work \
-	-B ${myBasedir}/workspace:/workspace
+	-B ${myBasedir}/workspace:/workspace \
 	-B ${myBasedir}/${myHome}:$HOME \
 	${myBasedir}/vllm-openai_v0.7.2.sif \
-	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
+	bash -c "cd \$HOME/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
 ```
 
 - 派送 job_v100.slurm
 
 ```bash
+cd /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker
+mkdir logs/
 sbatch job_v100.slurm
 ```
 
 ## 執行 (運算, slurm h100)
-- 編寫派送檔案 job_h100.slurm
+- 編寫派送檔案  /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker/job_h100.slurm
 
 ```bash
 #!/bin/bash
@@ -116,7 +117,7 @@ sbatch job_v100.slurm
 
 # 建立虛擬專屬目錄
 myBasedir="/work/c00cjz00/github/hpc_unsloth_grpo"
-myHome="myhome/grpo"
+myHome="home"
 mkdir -p ${myBasedir}/${myHome}
 mkdir -p ${myBasedir}/workspace
 
@@ -129,15 +130,16 @@ singularity exec \
 	--nv \
 	--no-home \
 	-B /work \
-	-B ${myBasedir}/workspace:/workspace
+	-B ${myBasedir}/workspace:/workspace \
 	-B ${myBasedir}/${myHome}:$HOME \
 	${myBasedir}/vllm-openai_v0.7.2.sif \
-	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
+	bash -c "cd \$HOME/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
 ```
 
 - 派送 job_h100.slurm
 
 ```bash
+cd /work/$(whoami)/github/hpc_unsloth_grpo/home/github/grpo_unsloth_docker
 sbatch job_h100.slurm
 ```
 
