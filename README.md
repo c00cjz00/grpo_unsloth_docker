@@ -135,6 +135,28 @@ singularity exec \
 	bash -c "cd ~/github/grpo_unsloth_docker; export PATH=\$PATH:\$HOME/.local/bin; uv run python main.py 'saving=null' 'training.max_steps=10'"
 ```
 
+## 輸出model, inference example
+- strawberry_example
+
+Q: How many r's are in strawberry?"
+
+A: 
+```bash
+<reasoning>
+To find out how many r's are in the word "strawberry," we need to count each occurrence of the letter r in the word. We can do this by examining each letter of the word individually:
+
+strawberry
+- The first r is in the 1st position
+- The second r is in the 5th position
+- The third r is in the 7th position
+
+Counting these occurrences, we find that there are 3 r's in the word "strawberry."
+</reasoning>
+<answer>
+There are 3 r's in the word "strawberry."
+</answer>
+```
+
 - 派送 job_h100.slurm
 
 ```bash
