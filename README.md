@@ -39,8 +39,7 @@ uv run python main.py 'saving=null' 'training.max_steps=10'
 
 ## 執行 (運算, slurm v100)
 - 編寫派送檔案 job_v100.slurm
-```bash
-sbatch job_v100.slurm
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=grpo             # 設定作業名稱為 "grpo"
@@ -84,11 +83,14 @@ singularity exec \
 ```
 
 - 派送 job_v100.slurm
+
 ```bash
 sbatch job_v100.slurm
 ```
+
 ## 執行 (運算, slurm h100)
 - 編寫派送檔案 job_h100.slurm
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=grpo            # 作業名稱
@@ -134,6 +136,7 @@ singularity exec \
 ```
 
 - 派送 job_h100.slurm
+
 ```bash
 sbatch job_h100.slurm
 ```
