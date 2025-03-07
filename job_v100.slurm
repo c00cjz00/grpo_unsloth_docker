@@ -19,7 +19,7 @@
 
 
 # 建立虛擬專屬目錄
-myBasedir="/work/c00cjz00/github/hpc_unsloth_grpo"
+myBasedir="/work/$(whoami)/github/hpc_unsloth_grpo"
 myHome="home"
 mkdir -p ${myBasedir}/${myHome}
 mkdir -p ${myBasedir}/workspace
