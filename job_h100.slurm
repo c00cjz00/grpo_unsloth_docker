@@ -2,7 +2,7 @@
 #SBATCH --job-name=grpo            # 作業名稱
 #SBATCH --partition=GRPO           # 分區名稱
 #SBATCH --account=GOV114013        # 資源計算帳號
-#SBATCH --nodes=1        	       # 每節點 1 個任務
+#SBATCH --nodes=1        	   # 每節點 1 個任務
 #SBATCH --ntasks-per-node=1        # 每節點 1 個任務
 #SBATCH --cpus-per-task=12         # 每個任務分配 12 個 CPU 核心（假設節點有足夠的核心）
 #SBATCH --gpus-per-node=1          # 每節點 1 個 GPU
